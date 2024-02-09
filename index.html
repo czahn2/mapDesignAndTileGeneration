@@ -74,7 +74,7 @@
     <div id='map'></div>
     <script type="text/javascript">
         mapboxgl.accessToken =
-            'pk.eyJ1IjoiamFrb2J6aGFvIiwiYSI6ImNpcms2YWsyMzAwMmtmbG5icTFxZ3ZkdncifQ.P9MBej1xacybKcDN_jehvw';
+            'pk.eyJ1IjoiY3phaG4yIiwiYSI6ImNsczNuODdlZTBvNXQyaXBidXZpZXdiamUifQ.VVwXh_XspA4FJt3D-mS7og';
         let map = new mapboxgl.Map({
             container: 'map', // container ID
             style: 'mapbox://styles/mapbox/dark-v10',
@@ -84,40 +84,76 @@
 
         map.on('load', () => { //simplifying the function statement: arrow with brackets to define a function
 
-            map.addSource('uw-tiles', {
+            map.addSource('world-tiles', {
                 'type': 'raster',
                 'tiles': [
-                    'assets/uw/{z}/{x}/{y}.png'
+                    'assets/world_tiles/{z}/{x}/{y}.png'
                 ],
                 'tileSize': 256,
                 'attribution': 'Map tiles designed by Bo Zhao</a>'
             });
 
-            map.addSource('lgbtq-tiles', {
+            map.addSource('thematic-tiles', {
                 'type': 'raster',
                 'tiles': [
-                    'assets/lgbtq/{z}/{x}/{y}.png'
+                    'assets/thematic_tiles/{z}/{x}/{y}.png'
                 ],
                 'tileSize': 256,
                 'attribution': 'Map tiles designed by Bo Zhao'
             });
 
-            map.addLayer({
-                'id': 'uw',
+            map.addSource('UW-tiles', {
                 'type': 'raster',
-                'layout': {
-                    'visibility': 'none'
-                },
-                'source': 'uw-tiles'
+                'tiles': [
+                    'assets/UW_tiles/{z}/{x}/{y}.png'
+                ],
+                'tileSize': 256,
+                'attribution': 'Map tiles designed by Bo Zhao</a>'
+            });
+
+            map.addSource('thematicAndBasemap-tiles', {
+                'type': 'raster',
+                'tiles': [
+                    'assets/thematicAndBasemap_tiles/{z}/{x}/{y}.png'
+                ],
+                'tileSize': 256,
+                'attribution': 'Map tiles designed by Bo Zhao</a>'
             });
 
             map.addLayer({
-                'id': 'lgbtq',
+                'id': 'basemap',
                 'type': 'raster',
                 'layout': {
                     'visibility': 'none'
                 },
-                'source': 'lgbtq-tiles'
+                'source': 'world-tiles'
+            });
+
+            map.addLayer({
+                'id': 'hospitals',
+                'type': 'raster',
+                'layout': {
+                    'visibility': 'none'
+                },
+                'source': 'thematic-tiles'
+            });
+
+            map.addLayer({
+                'id': 'thematic and basemap',
+                'type': 'raster',
+                'layout': {
+                    'visibility': 'none'
+                },
+                'source': 'thematicAndBasemap-tiles'
+            });
+
+            map.addLayer({
+                'id': 'UW',
+                'type': 'raster',
+                'layout': {
+                    'visibility': 'none'
+                },
+                'source': 'UW-tiles'
             });
 
         });
@@ -126,12 +162,12 @@
         // After the last frame rendered before the map enters an "idle" state.
         map.on('idle', () => {
             // If these two layers were not added to the map, abort
-            if (!map.getLayer('uw') || !map.getLayer('lgbtq')) {
+            if (!map.getLayer('basemap') || !map.getLayer('hospitals')) {
                 return;
             }
 
             // Enumerate ids of the layers.
-            const toggleableLayerIds = ['uw', 'lgbtq'];
+            const toggleableLayerIds = ['basemap', 'hospitals', 'thematic and basemap', 'UW'];
 
             // Set up the corresponding toggle button for each layer.
             for (const id of toggleableLayerIds) {
