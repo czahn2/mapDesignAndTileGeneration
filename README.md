@@ -1,7 +1,7 @@
 # mapDesignAndTileGeneration
 
 
-http://127.0.0.1:5500/mapDesignAndTileGeneration/index.html
+https://czahn2.github.io/mapDesignAndTileGeneration/
 
 # Layer 1 - Basemap
 This tile set is made from a generic Mapbox basemap, clipped to the extent of the thematic data to enhance readability. It is focused on the Seattle urban area.
